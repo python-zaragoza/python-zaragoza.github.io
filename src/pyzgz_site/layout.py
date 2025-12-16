@@ -1,9 +1,8 @@
 import reflex as rx
-from reflex.style import color_mode, set_color_mode
 
 BASE_FONT = "system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif"
 styles = {
-    # No fijamos color global; dejamos que el tema controle el color según el modo
+    # Don't set global colors; let the theme control the colors based on mode
     "global": {"font_family": BASE_FONT, "line_height": "1.6"},
     "container": {
         "max_width": "1100px",
@@ -17,24 +16,7 @@ EMAIL = "zaragoza@es.python.org"
 
 
 def dark_mode_toggle() -> rx.Component:
-    return rx.segmented_control.root(
-        # rx.segmented_control.item(
-        #     rx.icon(tag="monitor", size=20),
-        #     value="system",
-        # ),
-        rx.segmented_control.item(
-            rx.icon(tag="sun", size=20),
-            value="light",
-        ),
-        rx.segmented_control.item(
-            rx.icon(tag="moon", size=20),
-            value="dark",
-        ),
-        on_change=set_color_mode,
-        variant="classic",
-        radius="large",
-        value=color_mode,
-    )
+    return rx.color_mode.button()
 
 
 def nav():
@@ -54,7 +36,7 @@ def nav():
                 rx.link("Charlas", href="/talks"),
                 rx.link("Sobre", href="/about"),
                 rx.link("Contacto", href="/contact"),
-                # dark_mode_toggle(),
+                rx.box(dark_mode_toggle(), padding="8px"),
                 spacing="4",
                 display=["none", "flex"],
             ),
