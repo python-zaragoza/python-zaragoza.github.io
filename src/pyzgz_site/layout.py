@@ -54,7 +54,7 @@ def nav():
                 rx.link("Charlas", href="/talks"),
                 rx.link("Sobre", href="/about"),
                 rx.link("Contacto", href="/contact"),
-                dark_mode_toggle(),
+                # dark_mode_toggle(),
                 spacing="4",
                 display=["none", "flex"],
             ),
