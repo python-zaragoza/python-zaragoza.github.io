@@ -1,10 +1,10 @@
 import reflex as rx
 
-from pyzgz_site.layout import page_wrapper, styles
+from pyzgz_site.layout import styles
 
 
 def index():
-    return page_wrapper(
+    return rx.box(
         rx.section(
             rx.vstack(
                 rx.image(

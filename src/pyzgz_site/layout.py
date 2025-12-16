@@ -2,7 +2,7 @@ import reflex as rx
 
 BASE_FONT = "system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif"
 styles = {
-    # No fijamos color global; dejamos que el tema controle el color según el modo
+    # Don't set global colors; let the theme control the colors based on mode
     "global": {"font_family": BASE_FONT, "line_height": "1.6"},
     "container": {
         "max_width": "1100px",
@@ -36,7 +36,7 @@ def nav():
                 rx.link("Charlas", href="/talks"),
                 rx.link("Sobre", href="/about"),
                 rx.link("Contacto", href="/contact"),
-                # dark_mode_toggle(),
+                rx.box(dark_mode_toggle(), padding="8px"),
                 spacing="4",
                 display=["none", "flex"],
             ),
