@@ -1,7 +1,7 @@
 [project]
 name = "pyzgz"
 version = "0.1.0"
-description = "Add your description here"
+description ="Site for Python Zaragoza Community" 
 readme = "README.md"
 authors = [
     { name = "sarudego", email = "sruizdegopegui@gmail.com" }
