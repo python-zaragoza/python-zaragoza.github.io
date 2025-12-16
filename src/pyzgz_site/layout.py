@@ -64,10 +64,9 @@ def nav():
             "top": 0,
             "z_index": 1000,
             "padding": "0.75rem 0",
-            # Bordes y fondo según modo
             "border_bottom": rx.color_mode_cond(light="#eaeaea 1px solid", dark="#222 1px solid"),
-            "background": rx.color_mode_cond(light="#ffffffcc", dark="#0b0b0bcc"),
-            "backdrop_filter": "saturate(180%) blur(8px)",
+            # "background": rx.color_mode_cond(light="#ffffffcc", dark="#0b0b0bcc"),
+            # "backdrop_filter": "saturate(180%) blur(8px)",
         },
     )
 
