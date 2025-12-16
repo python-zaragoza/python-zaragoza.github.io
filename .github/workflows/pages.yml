@@ -49,6 +49,29 @@ jobs:
           # List the contents of the build directory
           ls -la .web/build/client/
 
+      - name: Disable WebSocket in createLucideIcon bundle (safe)
+        run: |
+          set -e
+
+          FILE=$(ls .web/build/client/createLucideIcon-*.js | head -n 1)
+
+          if [ ! -f "$FILE" ]; then
+            echo "❌ createLucideIcon bundle not found"
+            exit 1
+          fi
+
+          echo "Patching WebSocket createSocket in $FILE"
+
+          # Replace JUST the first appearance of createSocket
+          sed -i '0,/createSocket(uri,protocols,opts){/{s/createSocket(uri,protocols,opts){[^}]*}/createSocket(uri,protocols,opts){throw new Error("WebSocket disabled")}/}' "$FILE"
+
+
+      - name: Verify WebSocket patch
+        run: |
+          grep -n 'createSocket(uri,protocols,opts){throw new Error("WebSocket disabled")}' "$FILE" \
+            && echo "✅ WebSocket successfully disabled"
+
+
       - name: Debug export outputs
         run: |
           echo "PWD: $(pwd)"
