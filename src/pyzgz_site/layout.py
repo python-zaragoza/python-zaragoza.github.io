@@ -36,7 +36,7 @@ def nav():
                 rx.link("Charlas", href="/talks"),
                 rx.link("Sobre", href="/about"),
                 rx.link("Contacto", href="/contact"),
-                rx.box(dark_mode_toggle(), padding="8px"),
+                # rx.box(dark_mode_toggle(), padding="8px"),
                 spacing="4",
                 display=["none", "flex"],
             ),
@@ -51,7 +51,7 @@ def nav():
                         rx.menu.item("Charlas", on_click=[rx.redirect("/talks")]),
                         rx.menu.item("Sobre", on_click=[rx.redirect("/about")]),
                         rx.menu.item("Contacto", on_click=[rx.redirect("/contact")]),
-                        rx.box(dark_mode_toggle(), padding="8px"),
+                        # rx.box(dark_mode_toggle(), padding="8px"),
                     ),
                 ),
                 display=["inline-flex", "none"],
@@ -65,8 +65,8 @@ def nav():
             "z_index": 1000,
             "padding": "0.75rem 0",
             "border_bottom": rx.color_mode_cond(light="#eaeaea 1px solid", dark="#222 1px solid"),
-            # "background": rx.color_mode_cond(light="#ffffffcc", dark="#0b0b0bcc"),
-            # "backdrop_filter": "saturate(180%) blur(8px)",
+            "background": rx.color_mode_cond(light="#ffffffcc", dark="#0b0b0bcc"),
+            "backdrop_filter": "saturate(180%) blur(8px)",
         },
     )
 
@@ -102,7 +102,8 @@ def footer():
             "border_top": rx.color_mode_cond(light="#eaeaea 1px solid", dark="#222 1px solid"),
             "padding": "1.25rem 0",
             "margin_top": "2rem",
-            "background": rx.color_mode_cond(light="#fafafa", dark="#0b0b0b"),
+            # "background": rx.color_mode_cond(light="#fafafa", dark="#0b0b0b"),
+            "background": rx.color_mode_cond(light="#ffffffcc", dark="#0b0b0bcc"),
         },
     )
 
