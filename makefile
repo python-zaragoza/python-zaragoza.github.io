@@ -22,3 +22,7 @@ build-raw:
 
 build-front-raw:
 	uv run reflex export --frontend-only --no-zip
+
+fetch-meetup:
+	@$(call pinfo,Fetching events from Meetup.com...)
+	uv run python scripts/fetch_meetup.py
