@@ -1,4 +1,4 @@
-# Python Zaragoza — Community website
+# Python Zaragoza Community website
 
 Official website of the **Python Zaragoza** community built with
 [Reflex](https://reflex.dev/) and managed with
@@ -16,7 +16,7 @@ Python Zaragoza is a local community of people interested in **Python** in Zarag
 
 Our goal is to promote the use and learning of Python in an open and friendly environment.
 
-------------------------------------------------------------------------
+---
 
 ## 📂 Project structure
 
@@ -39,44 +39,46 @@ Our goal is to promote the use and learning of Python in an open and friendly en
 
 Note: the site is prepared for static deployment on GitHub Pages.
 
-------------------------------------------------------------------------
+---
 
 ## 🛠️ Local development
 
 0. **Prerequisites:**
 
-    - Python 3.11 or newer.
-    - uv installed. See <https://docs.astral.sh/uv/getting-started/installation/> (e.g., `pipx install uv`).
+   - Python 3.13 or newer.
+   - uv installed. See <https://docs.astral.sh/uv/getting-started/installation/> (e.g., `pipx install uv`).
 
 1. **Clone the repository and go to `web/`:**
 
-    ``` bash
-    git clone <url_del_repo>
-    cd <repo>
-    cd web
-    ```
+   ```bash
+   git clone <url_del_repo>
+   cd <repo>
+   cd web
+   ```
 
 2. **Install dependencies with uv:**
 
-    ``` bash
-    uv sync
-    ```
+   ```bash
+   uv sync
+   ```
 
 3. **Start the dev server:**
 
-    ``` bash
-    uvx reflex run
-    ```
+   ```bash
+   uv run reflex run
+   ```
 
-    Then open <http://localhost:3000>.
+   Then open <http://localhost:3000>.
 
 4. **Cache cleanup (if HMR behaves oddly):**
 
-    ``` bash
-    rm -rf .web
-    ```
+   ```bash
+   rm -rf .web
+   ```
 
-------------------------------------------------------------------------
+Note: There are make commands to perform this actions too.
+
+---
 
 ## 🌐 Deployment
 
@@ -84,20 +86,20 @@ Note: the site is prepared for static deployment on GitHub Pages.
 
 1. Build the site:
 
-    ``` bash
-    uvx reflex export --frontend-only
-    ```
+   ```bash
+   uv run reflex export --frontend-only
+   ```
 
-    This creates a `./.web/_static` directory with files ready to publish.
+   This creates a `./.web/_static` directory with files ready to publish.
 
 2. Configure a GitHub Actions workflow to:
 
-    - Run `uvx reflex export --frontend-only`.
-    - Publish `./.web/_static` to GitHub Pages.
+   - Run `uv run reflex export --frontend-only`.
+   - Publish `./.web/_static` to GitHub Pages.
 
 Tip: create a workflow that builds on every push to `main` and uploads `./.web/_static` as a Pages artifact.
 
-------------------------------------------------------------------------
+---
 
 ## 📬 Contact and Talks
 
@@ -112,7 +114,7 @@ The `Charlas` page links to a **Google Form**:
 - Current link: `https://forms.gle/qvMCiq8GkyCty79N8` (configurable in `pyzgz/talks_page.py`, constant `GOOGLE_FORM_URL`).
 - Alternatively, email us at `zaragoza@es.python.org`.
 
-------------------------------------------------------------------------
+---
 
 ## ⚙️ Configuration
 
@@ -133,13 +135,13 @@ If backend/APIs get integrated in the future, they will be documented here.
   uvx reflex run
   ```
 
-------------------------------------------------------------------------
+---
 
 ## 📜 License
 
 [MIT](LICENSE)
 
-------------------------------------------------------------------------
+---
 
 ## 🗺️ Roadmap
 
@@ -153,11 +155,11 @@ If backend/APIs get integrated in the future, they will be documented here.
 - [ ] **Automated deployment** on GitHub Pages with a stable workflow.
 - [ ] **Optional** English/Spanish i18n.
 
-------------------------------------------------------------------------
+---
 
 **Made with ❤️ in Zaragoza.**
 
-------------------------------------------------------------------------
+---
 
 ## 🤝 Contributing
 

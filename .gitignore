@@ -1,6 +1,15 @@
-.states
 __pycache__/
 .web
+.states
+.venv/
+build/
+.direnv/
+.states/
+assets/external/
+
+coverage.xml
+.python-version
+.coverage
+*.pyc
 *.db
 *.py[cod]
-assets/external/

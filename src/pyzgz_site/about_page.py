@@ -1,5 +1,6 @@
 import reflex as rx
-from .layout import page_wrapper, styles
+
+from pyzgz_site.layout import page_wrapper, styles
 
 
 def about():
@@ -21,5 +22,5 @@ def about():
                 align="center",
             ),
             style=styles["section"],
-        )
+        ),
     )

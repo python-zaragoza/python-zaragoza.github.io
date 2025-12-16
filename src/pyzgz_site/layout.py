@@ -1,5 +1,5 @@
 import reflex as rx
-from reflex.style import set_color_mode, color_mode
+from reflex.style import color_mode, set_color_mode
 
 BASE_FONT = "system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif"
 styles = {
@@ -83,9 +83,7 @@ def nav():
             "z_index": 1000,
             "padding": "0.75rem 0",
             # Bordes y fondo según modo
-            "border_bottom": rx.color_mode_cond(
-                light="#eaeaea 1px solid", dark="#222 1px solid"
-            ),
+            "border_bottom": rx.color_mode_cond(light="#eaeaea 1px solid", dark="#222 1px solid"),
             "background": rx.color_mode_cond(light="#ffffffcc", dark="#0b0b0bcc"),
             "backdrop_filter": "saturate(180%) blur(8px)",
         },
@@ -99,9 +97,7 @@ def footer():
             rx.hstack(
                 rx.hstack(
                     rx.icon(tag="external-link", size=16),
-                    rx.link(
-                        "Telegram", href="https://t.me/python_zgz", is_external=True
-                    ),
+                    rx.link("Telegram", href="https://t.me/python_zgz", is_external=True),
                     spacing="1",
                 ),
                 rx.text("·"),
@@ -122,9 +118,7 @@ def footer():
             align="center",
         ),
         style={
-            "border_top": rx.color_mode_cond(
-                light="#eaeaea 1px solid", dark="#222 1px solid"
-            ),
+            "border_top": rx.color_mode_cond(light="#eaeaea 1px solid", dark="#222 1px solid"),
             "padding": "1.25rem 0",
             "margin_top": "2rem",
             "background": rx.color_mode_cond(light="#fafafa", dark="#0b0b0b"),

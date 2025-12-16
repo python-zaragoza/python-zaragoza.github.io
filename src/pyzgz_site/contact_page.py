@@ -1,5 +1,6 @@
 import reflex as rx
-from .layout import page_wrapper, styles, EMAIL
+
+from pyzgz_site.layout import EMAIL, page_wrapper, styles
 
 
 def contact():
@@ -13,5 +14,5 @@ def contact():
                 align="center",
             ),
             style=styles["section"],
-        )
+        ),
     )

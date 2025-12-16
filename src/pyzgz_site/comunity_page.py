@@ -1,5 +1,6 @@
 import reflex as rx
-from .layout import page_wrapper, styles
+
+from pyzgz_site.layout import page_wrapper, styles
 
 
 def comunity():
@@ -11,20 +12,22 @@ def comunity():
                 rx.list(
                     rx.list_item(
                         rx.link(
-                            "Telegram", href="https://t.me/python_zgz", is_external=True
-                        )
+                            "Telegram",
+                            href="https://t.me/python_zgz",
+                            is_external=True,
+                        ),
                     ),
                     rx.list_item(
                         rx.link(
                             "Meetup",
                             href="https://www.meetup.com/es-ES/python_zgz/",
                             is_external=True,
-                        )
+                        ),
                     ),
                 ),
                 spacing="3",
                 align="center",
             ),
             style=styles["section"],
-        )
+        ),
     )
