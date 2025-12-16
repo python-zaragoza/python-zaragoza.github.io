@@ -38,7 +38,7 @@ jobs:
           pwd
           ls -la
           # Build the static site
-          uvx reflex export --frontend-only --no-zip
+          uv reflex export --frontend-only --no-zip
           # List the contents of the build directory
           ls -la .web/build/client/
 
