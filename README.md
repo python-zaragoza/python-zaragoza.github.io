@@ -1,103 +1,137 @@
 # Python Zaragoza Community website
 
-Official website of the **Python Zaragoza** community built with
-[Reflex](https://reflex.dev/) and managed with
-[uv](https://docs.astral.sh/uv/).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![Reflex](https://img.shields.io/badge/Reflex-0.3.9-8B5CF6)](https://reflex.dev/)
+
+Official website of the **Python Zaragoza** community built with [Reflex](https://reflex.dev/) and deployed on GitHub Pages.
 
 ![PyZgz Logo](assets/logo.png)
 
-## 🚀 What is Python Zaragoza?
+## 🚀 About Python Zaragoza
 
-Python Zaragoza is a local community of people interested in **Python** in Zaragoza. We organize:
+Python Zaragoza is a local community of Python enthusiasts in Zaragoza, Spain. We organize:
 
-- 📅 **Meetups**: talks and networking.
-- 🛠️ **Workshops**: hands-on sessions for all levels.
-- 🤝 **Projects**: open and collaborative initiatives.
+- 📅 **Meetups**: Technical talks and networking events
+- 🛠️ **Workshops**: Hands-on coding sessions for all skill levels
+- 🤝 **Collaborative Projects**: Open-source initiatives and group projects
+- 🌟 **Community Events**: Hackathons, sprints, and social gatherings
 
-Our goal is to promote the use and learning of Python in an open and friendly environment.
+Our mission is to foster a welcoming and inclusive environment for learning and sharing knowledge about Python and related technologies.
 
----
+## ✨ Features
 
-## 📂 Project structure
+- 🌓 Dark/Light mode with system preference detection
+- 📱 Fully responsive design
+- ⚡ Fast static site generation
+- 📅 Event management and display
+- ✉️ Contact form functionality
+- 📝 Blog section for community updates
 
-    .
-      ├── assets/          # Static assets (logo, favicon, generated data)
-      ├── pyzgz/           # Reflex application code
-      │   ├── main.py      # App entry point (App & routes)
-      │   ├── layout.py    # Shared layout (nav, footer, page_wrapper, styles)
-      │   ├── index_page.py
-      │   ├── events_page.py
-      │   ├── blog_page.py
-      │   ├── comunity_page.py
-      │   ├── talks_page.py
-      │   ├── about_page.py
-      │   └── contact_page.py
-      ├── rxconfig.py      # Reflex configuration
-      ├── pyproject.toml   # Dependencies and metadata (Python >=3.11)
-      ├── uv.lock          # Locked dependencies (uv)
-      └── README.md
+## 📂 Project Structure
 
-Note: the site is prepared for static deployment on GitHub Pages.
+```
+.
+├── assets/                  # Static assets (images, icons, generated data)
+│   ├── events.json         # Auto-generated events data
+│   └── logo.png            # Community logo
+├── src/
+│   └── pyzgz_site/         # Reflex application code
+│       ├── __init__.py
+│       ├── pyzgz_site.py   # Main app configuration and routes
+│       ├── layout.py       # Shared layout components and styles
+│       ├── index_page.py   # Home page
+│       ├── events_page.py  # Events listing
+│       ├── blog_page.py    # Blog section
+│       ├── talks_page.py   # Talk submission
+│       ├── about_page.py   # About the community
+│       └── contact_page.py # Contact form
+├── .github/workflows/      # GitHub Actions workflows
+│   └── pages.yml           # GitHub Pages deployment
+├── pyproject.toml          # Python project metadata and dependencies
+├── uv.lock                 # Locked dependencies (uv)
+└── README.md               # This file
+```
 
----
+## 🚀 Getting Started
 
-## 🛠️ Local development
+### Prerequisites
 
-0. **Prerequisites:**
+- Python 3.13 or newer
+- [uv](https://docs.astral.sh/uv/) (recommended) or pip
+- Node.js 18+ (for Reflex development server)
 
-   - Python 3.13 or newer.
-   - uv installed. See <https://docs.astral.sh/uv/getting-started/installation/> (e.g., `pipx install uv`).
+### Local Development
 
-1. **Clone the repository and go to `web/`:**
-
+1. **Clone the repository:**
    ```bash
-   git clone <url_del_repo>
-   cd <repo>
-   cd web
+   git clone https://github.com/PythonZaragoza/python-zaragoza.github.io.git
+   cd python-zaragoza.github.io
    ```
 
-2. **Install dependencies with uv:**
-
+2. **Set up the environment and install dependencies:**
    ```bash
+   # Using uv (recommended)
    uv sync
+   
+   # Or using pip
+   pip install -e .
    ```
 
-3. **Start the dev server:**
-
+3. **Start the development server:**
    ```bash
    uv run reflex run
    ```
+   The site will be available at http://localhost:3000
 
-   Then open <http://localhost:3000>.
-
-4. **Cache cleanup (if HMR behaves oddly):**
-
+4. **Build for production:**
    ```bash
-   rm -rf .web
+   uv run reflex export --frontend-only
    ```
-
-Note: There are make commands to perform this actions too.
-
----
+   The static files will be generated in `.web/build/client`
 
 ## 🌐 Deployment
 
-### GitHub Pages (static)
+The site is automatically deployed to GitHub Pages on every push to the `main` branch using GitHub Actions.
 
-1. Build the site:
+### Manual Deployment
 
+1. Build the static site:
    ```bash
    uv run reflex export --frontend-only
    ```
 
-   This creates a `./.web/_static` directory with files ready to publish.
+2. The static files will be in `.web/build/client`
 
-2. Configure a GitHub Actions workflow to:
+3. Configure your GitHub Pages to serve from the `gh-pages` branch or the `docs/` folder
 
-   - Run `uv run reflex export --frontend-only`.
-   - Publish `./.web/_static` to GitHub Pages.
+## 🛠️ Development
 
-Tip: create a workflow that builds on every push to `main` and uploads `./.web/_static` as a Pages artifact.
+### Available Scripts
+
+- `uv run reflex run` - Start development server
+- `uv run reflex export --frontend-only` - Build static site
+- `uv run pytest` - Run tests (when available)
+
+### Code Style
+
+- Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) for Python code
+- Use [Google-style docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings)
+- Format code with [Black](https://github.com/psf/black) and [isort](https://pycqa.github.io/isort/)
+
+## 🤝 Contributing
+
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📬 Contact
+
+- Website: [python-zaragoza.github.io](https://python-zaragoza.github.io)
+- Meetup: [meetup.com/python_zgz](https://www.meetup.com/es-ES/python_zgz/)
+- Email: zaragoza@es.python.org
 
 ---
 
@@ -152,7 +186,7 @@ If backend/APIs get integrated in the future, they will be documented here.
   - Static: prebuild `assets/events.json` in GitHub Actions.
 - [ ] **SEO & accessibility**: meta tags, OpenGraph, manifest, favicon.
 - [ ] **Visual design improvements**: light/dark theme, custom styles.
-- [ ] **Automated deployment** on GitHub Pages with a stable workflow.
+- [x] **Automated deployment** on GitHub Pages with a stable workflow.
 - [ ] **Optional** English/Spanish i18n.
 
 ---
