@@ -60,6 +60,10 @@ jobs:
           # Pages needs index.html at root from artifact
           test -f docs/index.html
 
+      - name: Create .nojekyll file in docs
+        run: |
+          touch docs/.nojekyll
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
