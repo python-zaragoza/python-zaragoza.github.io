@@ -49,7 +49,7 @@ jobs:
           # List the contents of the build directory
           ls -la .web/build/client/
 
-      - name: Disable WebSocket in createLucideIcon bundle (safe)
+      - name: Silence WebSocket errors (Engine.IO level)
         run: |
           set -e
 
@@ -60,24 +60,24 @@ jobs:
             exit 1
           fi
 
-          echo "Patching WebSocket createSocket in $FILE"
+          echo "Silencing WebSocket errors in $FILE"
 
-          # Replace JUST the first appearance of createSocket
-          sed -i '0,/createSocket(uri,protocols,opts){/{s/createSocket(uri,protocols,opts){[^}]*}/createSocket(uri,protocols,opts){throw new Error("WebSocket disabled")}/}' "$FILE"
+          # 1️⃣ Silencing emitReserved("error", ...)
+          sed -i 's/emitReserved(`error`,[^)]*)/void 0/g' "$FILE"
 
-      - name: Verify WebSocket patch
+          # 2 Silencing onError("websocket error", ...)
+          sed -i 's/onError(`websocket error`,[^)]*)/void 0/g' "$FILE"
+
+          # 3  Silencing close by transport error
+          sed -i 's/_onClose(`transport error`,[^)]*)/void 0/g' "$FILE"
+
+      - name: Verify WebSocket errors silenced
         run: |
-          set -e
-
           FILE=$(ls .web/build/client/assets/createLucideIcon-*.js | head -n 1)
 
-          if [ ! -f "$FILE" ]; then
-            echo "❌ createLucideIcon bundle not found for verification"
-            exit 1
-          fi
-
-          grep -n 'createSocket(uri,protocols,opts){throw new Error("WebSocket disabled")}' "$FILE" \
-            && echo "✅ WebSocket successfully disabled"
+          ! grep -q 'websocket error' "$FILE" \
+            && ! grep -q 'emitReserved(`error`' "$FILE" \
+            && echo "✅ WebSocket errors successfully silenced"
 
       - name: Debug export outputs
         run: |

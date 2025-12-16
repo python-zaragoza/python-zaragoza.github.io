@@ -1,15 +1,14 @@
 import json
-import os
-import pathlib
 from datetime import UTC, datetime
+from pathlib import Path
 
 import reflex as rx
 
 from pyzgz_site.layout import page_wrapper, styles
 
 # Resolve assets/events.json relative to the project root (one level up from this file's dir)
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-ASSETS_EVENTS = os.path.join(BASE_DIR, "assets", "events.json")
+BASE_DIR = Path(__file__).parent.parent.parent
+ASSETS_EVENTS = Path(BASE_DIR) / "assets" / "events.json"
 
 
 def _load_events() -> list[dict]:
