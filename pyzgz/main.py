@@ -7,7 +7,10 @@ from .about_page import about as about_page
 from .contact_page import contact as contact_page
 
 # ---------- App & routes ----------
-app = rx.App(theme=rx.theme(appearance="dark"))
+# Configure app for static export
+app = rx.App(
+    theme=rx.theme(appearance="dark")
+)
 app.add_page(index_page, route="/", title="PythonZgz — Comunidad Python Zaragoza")
 app.add_page(events_page, route="/events", title="Eventos · PythonZgz")
 app.add_page(blog_page, route="/blog", title="Blog · PythonZgz")
