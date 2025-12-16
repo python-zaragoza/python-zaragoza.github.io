@@ -53,7 +53,7 @@ jobs:
         run: |
           set -e
 
-          FILE=$(ls .web/build/client/createLucideIcon-*.js | head -n 1)
+          FILE=$(ls .web/build/client/assets/createLucideIcon-*.js | head -n 1)
 
           if [ ! -f "$FILE" ]; then
             echo "❌ createLucideIcon bundle not found"
