@@ -32,13 +32,6 @@ jobs:
       - name: Sync dependencies
         run: uv sync
 
-      - name: Fetch Meetup events
-        env:
-          MEETUP_GROUP: python_zgz
-          MEETUP_TOKEN: ${{ secrets.MEETUP_TOKEN }}
-        run: |
-          uv run python scripts/fetch_meetup.py
-
       - name: Build static site (Reflex export frontend-only)
         run: |
           # Ensure we're in the correct directory
