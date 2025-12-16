@@ -9,7 +9,7 @@ from .contact_page import contact as contact_page
 # ---------- App & routes ----------
 # Configure app for static export
 app = rx.App(
-    theme=rx.theme(appearance="dark")
+    theme=rx.theme(appearance="dark"),
 )
 app.add_page(index_page, route="/", title="PythonZgz — Comunidad Python Zaragoza")
 app.add_page(events_page, route="/events", title="Eventos · PythonZgz")
