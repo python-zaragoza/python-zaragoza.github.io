@@ -46,8 +46,8 @@ jobs:
           ls -la
           # Build the static site
           uvx reflex export --frontend-only --no-zip
-          # List the contents of the _static directory
-          ls -la _static/
+          # List the contents of the build directory
+          ls -la .web/build/client/
 
       - name: Debug export outputs
         run: |
@@ -62,16 +62,16 @@ jobs:
           # Create docs directory
           mkdir -p docs
           
-          # Copy the contents of _static to docs
-          if [ -d "_static" ]; then
-            echo "Copying _static/ to docs/"
-            cp -r _static/* docs/
+          # Copy the contents of .web/build/client to docs
+          if [ -d ".web/build/client" ]; then
+            echo "Copying .web/build/client/ to docs/"
+            cp -r .web/build/client/* docs/
           fi
           
           # Ensure assets directory exists and copy static assets
-          mkdir -p docs/assets
-          if [ -d "assets" ]; then
+          if [ -d "assets" ] && [ ! -d "docs/assets" ]; then
             echo "Copying assets/ to docs/assets/"
+            mkdir -p docs/assets
             cp -r assets/* docs/assets/ || true
           fi
           
@@ -81,10 +81,6 @@ jobs:
           # Debug: Show directory structure
           echo "Final docs directory structure:"
           find docs -type f | sort
-
-      - name: Create .nojekyll file in docs
-        run: |
-          touch docs/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
