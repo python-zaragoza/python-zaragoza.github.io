@@ -11,15 +11,29 @@ ASSETS_EVENTS = os.path.join(BASE_DIR, "assets", "events.json")
 
 
 def _load_events() -> list[dict]:
-    """Load events from assets/events.json. Returns [] on any error."""
+    """
+    Static loading of events from assets/events.json.
+    Events are loaded during build time, not at runtime.
+    """
+    # This file is generated during deployment by GitHub Actions workflow
+    # See .github/workflows/pages.yml -> fetch_meetup.py
     try:
+        # Try to load events from the generated file
         if not os.path.exists(ASSETS_EVENTS):
-            return []
+            return [{"name": "No hay eventos próximamente", "description": "Vuelve pronto para ver nuestros próximos eventos"}]
+            
         with open(ASSETS_EVENTS, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return data if isinstance(data, list) else []
-    except Exception:
-        return []
+            
+        # Ensure we always return a list
+        if not isinstance(data, list):
+            return [{"name": "Error cargando eventos", "description": "Disculpa, hubo un problema al cargar los eventos"}]
+            
+        return data
+        
+    except Exception as e:
+        print(f"Error cargando eventos: {e}")
+        return [{"name": "Error cargando eventos", "description": "Disculpa, hubo un problema al cargar los eventos"}]
 
 
 def _parse_when(ev: dict) -> datetime | None:

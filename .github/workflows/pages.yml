@@ -40,7 +40,14 @@ jobs:
           uv run python scripts/fetch_meetup.py
 
       - name: Build static site (Reflex export frontend-only)
-        run: uvx reflex export --frontend-only
+        run: |
+          # Ensure we're in the correct directory
+          pwd
+          ls -la
+          # Build the static site
+          uvx reflex export --frontend-only --no-zip
+          # List the contents of the _static directory
+          ls -la _static/
 
       - name: Debug export outputs
         run: |
@@ -48,17 +55,32 @@ jobs:
           ls -la
           find . -maxdepth 3 -type f -name "*.zip" -print
 
-      - name: Extract frontend files (zip -> docs)
+      - name: Prepare static files
         run: |
           set -e
+          
+          # Create docs directory
           mkdir -p docs
-          ZIP="$(find . -maxdepth 3 -type f -name '*.zip' | head -n 1)"
-          echo "Using zip: $ZIP"
-          unzip -o "$ZIP" -d docs
-          echo "docs contents:"
-          ls -la docs
-          # Pages needs index.html at root from artifact
-          test -f docs/index.html
+          
+          # Copy the contents of _static to docs
+          if [ -d "_static" ]; then
+            echo "Copying _static/ to docs/"
+            cp -r _static/* docs/
+          fi
+          
+          # Ensure assets directory exists and copy static assets
+          mkdir -p docs/assets
+          if [ -d "assets" ]; then
+            echo "Copying assets/ to docs/assets/"
+            cp -r assets/* docs/assets/ || true
+          fi
+          
+          # Create .nojekyll file to prevent Jekyll processing
+          touch docs/.nojekyll
+          
+          # Debug: Show directory structure
+          echo "Final docs directory structure:"
+          find docs -type f | sort
 
       - name: Create .nojekyll file in docs
         run: |
