@@ -19,7 +19,7 @@ def _load_events() -> list[dict]:
     # See .github/workflows/pages.yml -> fetch_meetup.py
     try:
         # Try to load events from the generated file
-        if not pathlib.Path(ASSETS_EVENTS).exists():
+        if not Path(ASSETS_EVENTS).exists():
             return [
                 {
                     "name": "No hay eventos próximamente",
@@ -27,7 +27,7 @@ def _load_events() -> list[dict]:
                 },
             ]
 
-        with pathlib.Path(ASSETS_EVENTS).open(encoding="utf-8") as f:
+        with Path(ASSETS_EVENTS).open(encoding="utf-8") as f:
             data = json.load(f)
 
         # Ensure we always return a list
