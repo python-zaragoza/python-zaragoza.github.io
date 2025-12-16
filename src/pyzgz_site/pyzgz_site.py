@@ -1,10 +1,11 @@
 import reflex as rx
-from .index_page import index as index_page
-from .events_page import events as events_page
-from .blog_page import blog as blog_page
-from .talks_page import talks as talks_page
-from .about_page import about as about_page
-from .contact_page import contact as contact_page
+
+from pyzgz_site.about_page import about as about_page
+from pyzgz_site.blog_page import blog as blog_page
+from pyzgz_site.contact_page import contact as contact_page
+from pyzgz_site.events_page import events as events_page
+from pyzgz_site.index_page import index as index_page
+from pyzgz_site.talks_page import talks as talks_page
 
 # ---------- App & routes ----------
 # Configure app for static export

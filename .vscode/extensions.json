@@ -1,0 +1,26 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    // Nix
+    "pinage404.nix-extension-pack",
+    // VSCode
+    "ms-vscode-remote.vscode-remote-extensionpack",
+    "shardulm94.trailing-spaces",
+    // Git
+    "mhutchie.git-graph",
+    "waderyan.gitblame",
+    // Makefile
+    "ms-vscode.makefile-tools",
+    // Python
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "meta.pyrefly",
+    "charliermarsh.ruff",
+    // Toml
+    "tamasfe.even-better-toml",
+    // Markdown
+    "bierner.markdown-mermaid",
+    // CSV
+    "mechatroner.rainbow-csv"
+  ]
+}

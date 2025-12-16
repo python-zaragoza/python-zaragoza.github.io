@@ -1,12 +1,13 @@
 [project]
-name = "pyzgz"
+name = "pyzgz-site"
 version = "0.1.0"
-description ="Site for Python Zaragoza Community" 
+description = "Python Zaragoza Community website"
 readme = "README.md"
 authors = [
-    { name = "sarudego", email = "sruizdegopegui@gmail.com" }
+    { name = "sarudego", email = "sruizdegopegui@gmail.com" },
+    { name = "Ángel Felipe Santaliestra Pasías", email = "afsantaliestra@gmail.com" },
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.13,<3.14"
 dependencies = [
     "httpx>=0.28.1",
     "pydantic>=2.11.7",
@@ -15,15 +16,75 @@ dependencies = [
     "sqlmodel>=0.0.24",
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "black>=25.1.0",
-    "mypy>=1.17.1",
-    "pre-commit>=4.3.0",
-    "pytest>=8.4.1",
-    "ruff>=0.12.9",
+    "pre-commit==4.5.0",
+    "pyrefly==0.42.3",
+    "pytest==9.0.1",
+    "pytest-asyncio==1.3.0",
+    "pytest-cov==7.0.0",
+    "pytest-xdist==3.8.0",
+    "ruff==0.14.9",
 ]
+
+
+[tool.ruff]
+preview = true
+target-version = "py313"
+line-length = 120
+indent-width = 4
+
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "CPY",  # flake8-copyright
+    "D203", # pydocstyle - incorrect-blank-line-before-class
+    "D213", # pydocstyle - multi-line-summary-second-line
+]
+
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+
+[tool.ruff.format]
+quote-style = "double"
+
+
+[tool.pyrefly]
+use-ignore-files = false
+project-includes = ["src"]
+project-excludes = ["**/node_modules", "**/__pycache__", "**/*venv/**/*"]
+search-path = ["src"]
+python-platform = "linux"
+python-version = "3.13"
+python-interpreter-path = ".venv/bin/python3"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["src"]
+addopts = [
+    "-n",
+    "auto",
+    "--cov=src",
+    "--cov-report=html",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+]
+
+
+[build-system]
+requires = ["uv_build>=0.9.13,<0.10.0"]
+build-backend = "uv_build"

@@ -1,5 +1,6 @@
 import reflex as rx
-from .layout import page_wrapper, styles
+
+from pyzgz_site.layout import page_wrapper, styles
 
 
 def index():
@@ -7,7 +8,10 @@ def index():
         rx.section(
             rx.vstack(
                 rx.image(
-                    src="/logo.png", alt="Logo PythonZgz", width="200px", height="auto"
+                    src="/logo.png",
+                    alt="Logo PythonZgz",
+                    width="200px",
+                    height="auto",
                 ),
                 rx.heading("Comunidad Python Zaragoza", size="8"),
                 # rx.text(
@@ -18,7 +22,8 @@ def index():
                 rx.hstack(
                     rx.link(rx.button("Próximos eventos"), href="/events"),
                     rx.link(
-                        rx.button("Propón una charla", variant="outline"), href="/talks"
+                        rx.button("Propón una charla", variant="outline"),
+                        href="/talks",
                     ),
                     spacing="3",
                     wrap="wrap",
@@ -38,21 +43,21 @@ def index():
                             rx.heading("Meetups", size="4"),
                             rx.text("Charlas, demos y networking."),
                             spacing="2",
-                        )
+                        ),
                     ),
                     rx.card(
                         rx.vstack(
                             rx.heading("Talleres", size="4"),
                             rx.text("Sesiones prácticas."),
                             spacing="2",
-                        )
+                        ),
                     ),
                     rx.card(
                         rx.vstack(
                             rx.heading("Proyectos", size="4"),
                             rx.text("Iniciativas abiertas."),
                             spacing="2",
-                        )
+                        ),
                     ),
                     columns={"base": "1", "md": "3"},
                     gap="4",

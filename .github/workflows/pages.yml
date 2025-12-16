@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   workflow_dispatch:
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install uv
         run: pipx install uv
@@ -49,6 +49,36 @@ jobs:
           # List the contents of the build directory
           ls -la .web/build/client/
 
+      - name: Disable WebSocket in createLucideIcon bundle (safe)
+        run: |
+          set -e
+
+          FILE=$(ls .web/build/client/assets/createLucideIcon-*.js | head -n 1)
+
+          if [ ! -f "$FILE" ]; then
+            echo "❌ createLucideIcon bundle not found"
+            exit 1
+          fi
+
+          echo "Patching WebSocket createSocket in $FILE"
+
+          # Replace JUST the first appearance of createSocket
+          sed -i '0,/createSocket(uri,protocols,opts){/{s/createSocket(uri,protocols,opts){[^}]*}/createSocket(uri,protocols,opts){throw new Error("WebSocket disabled")}/}' "$FILE"
+
+      - name: Verify WebSocket patch
+        run: |
+          set -e
+
+          FILE=$(ls .web/build/client/assets/createLucideIcon-*.js | head -n 1)
+
+          if [ ! -f "$FILE" ]; then
+            echo "❌ createLucideIcon bundle not found for verification"
+            exit 1
+          fi
+
+          grep -n 'createSocket(uri,protocols,opts){throw new Error("WebSocket disabled")}' "$FILE" \
+            && echo "✅ WebSocket successfully disabled"
+
       - name: Debug export outputs
         run: |
           echo "PWD: $(pwd)"
@@ -58,26 +88,26 @@ jobs:
       - name: Prepare static files
         run: |
           set -e
-          
+
           # Create docs directory
           mkdir -p docs
-          
+
           # Copy the contents of .web/build/client to docs
           if [ -d ".web/build/client" ]; then
             echo "Copying .web/build/client/ to docs/"
             cp -r .web/build/client/* docs/
           fi
-          
+
           # Ensure assets directory exists and copy static assets
           if [ -d "assets" ] && [ ! -d "docs/assets" ]; then
             echo "Copying assets/ to docs/assets/"
             mkdir -p docs/assets
             cp -r assets/* docs/assets/ || true
           fi
-          
+
           # Create .nojekyll file to prevent Jekyll processing
           touch docs/.nojekyll
-          
+
           # Debug: Show directory structure
           echo "Final docs directory structure:"
           find docs -type f | sort

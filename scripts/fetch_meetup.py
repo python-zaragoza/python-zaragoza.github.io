@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Fetch upcoming and past Meetup events for a group and write assets/events.json.
+"""Fetch upcoming and past Meetup events for a group and write assets/events.json.
 
 Priority order:
 1) Use Meetup API (requires MEETUP_TOKEN via OAuth, and MEETUP_GROUP urlname).
@@ -15,9 +14,12 @@ Writes:
 """
 
 from __future__ import annotations
-import os
+
 import json
-from typing import Any, Dict, List
+import os
+import pathlib
+from datetime import UTC
+from typing import Any
 
 import httpx
 
@@ -26,10 +28,10 @@ OUTPUT_PATH = os.path.join(ASSETS_DIR, "events.json")
 
 
 def _ensure_assets_dir() -> None:
-    os.makedirs(ASSETS_DIR, exist_ok=True)
+    pathlib.Path(ASSETS_DIR).mkdir(exist_ok=True, parents=True)
 
 
-def fetch_api(group: str, token: str) -> List[Dict[str, Any]]:
+def fetch_api(group: str, token: str) -> list[dict[str, Any]]:
     url = f"https://api.meetup.com/{group}/events"
     # Request both upcoming and past (descending), large page size
     params = {"status": "upcoming,past", "desc": "true", "page": 200}
@@ -40,7 +42,7 @@ def fetch_api(group: str, token: str) -> List[Dict[str, Any]]:
         data = r.json()
         if not isinstance(data, list):
             return []
-        events: List[Dict[str, Any]] = []
+        events: list[dict[str, Any]] = []
         for ev in data:
             # Normalize minimal fields
             name = ev.get("name")
@@ -53,19 +55,17 @@ def fetch_api(group: str, token: str) -> List[Dict[str, Any]]:
                     venue = {"name": vname}
             # Per request: use SUMMARY as description; in API 'name' is the closest
             desc = name
-            events.append(
-                {
-                    "name": name,
-                    "link": link,
-                    "time": time_ms,
-                    "venue": venue,
-                    "description": desc,
-                }
-            )
+            events.append({
+                "name": name,
+                "link": link,
+                "time": time_ms,
+                "venue": venue,
+                "description": desc,
+            })
         return events
 
 
-def fetch_ical(group: str) -> List[Dict[str, Any]]:
+def fetch_ical(group: str) -> list[dict[str, Any]]:
     # Fallback: parse iCal feed (usually upcoming events only)
     ical_url = f"https://www.meetup.com/{group}/events/ical/"
     with httpx.Client(timeout=20.0) as client:
@@ -75,15 +75,15 @@ def fetch_ical(group: str) -> List[Dict[str, Any]]:
         raw_lines = r.text.splitlines()
 
     # Unfold folded lines per RFC 5545 (lines starting with space continue previous)
-    lines: List[str] = []
+    lines: list[str] = []
     for raw in raw_lines:
         if raw.startswith(" ") and lines:
             lines[-1] += raw[1:]
         else:
             lines.append(raw)
 
-    events: List[Dict[str, Any]] = []
-    cur: Dict[str, Any] | None = None
+    events: list[dict[str, Any]] = []
+    cur: dict[str, Any] | None = None
 
     for raw in lines:
         line = raw.strip()
@@ -97,7 +97,7 @@ def fetch_ical(group: str) -> List[Dict[str, Any]]:
                 tzid = cur.get("DTSTART_TZID")
                 time_ms = None
                 if isinstance(dt, str) and dt:
-                    from datetime import datetime, timezone
+                    from datetime import datetime
                     from zoneinfo import ZoneInfo
 
                     # Try several common formats
@@ -112,41 +112,31 @@ def fetch_ical(group: str) -> List[Dict[str, Any]]:
                             # If the string ends with Z, it's already UTC.
                             # If no Z and TZID provided, localize with that tz.
                             if dt.endswith("Z"):
-                                dt_obj = dt_obj.replace(tzinfo=timezone.utc)
+                                dt_obj = dt_obj.replace(tzinfo=UTC)
                             elif tzid:
                                 try:
                                     dt_obj = dt_obj.replace(tzinfo=ZoneInfo(tzid))
                                 except Exception:
                                     # Fallback to Europe/Madrid if TZID unknown
-                                    dt_obj = dt_obj.replace(
-                                        tzinfo=ZoneInfo("Europe/Madrid")
-                                    )
+                                    dt_obj = dt_obj.replace(tzinfo=ZoneInfo("Europe/Madrid"))
                             else:
                                 # No tz info; assume Europe/Madrid as Meetup feed usually emits local time
-                                dt_obj = dt_obj.replace(
-                                    tzinfo=ZoneInfo("Europe/Madrid")
-                                )
+                                dt_obj = dt_obj.replace(tzinfo=ZoneInfo("Europe/Madrid"))
                             # Convert to UTC for storage
-                            dt_obj = dt_obj.astimezone(timezone.utc)
+                            dt_obj = dt_obj.astimezone(UTC)
                             time_ms = int(dt_obj.timestamp() * 1000)
                             break
                         except Exception:
                             continue
 
-                events.append(
-                    {
-                        "name": cur.get("SUMMARY"),
-                        "link": cur.get("URL"),
-                        "time": time_ms,
-                        "venue": (
-                            {"name": cur.get("LOCATION")}
-                            if cur.get("LOCATION")
-                            else None
-                        ),
-                        # Per request: use SUMMARY as description in iCal too
-                        # "description": cur.get("SUMMARY"),
-                    }
-                )
+                events.append({
+                    "name": cur.get("SUMMARY"),
+                    "link": cur.get("URL"),
+                    "time": time_ms,
+                    "venue": ({"name": cur.get("LOCATION")} if cur.get("LOCATION") else None),
+                    # Per request: use SUMMARY as description in iCal too
+                    # "description": cur.get("SUMMARY"),
+                })
             cur = None
             continue
 
@@ -187,7 +177,7 @@ def main() -> int:
     token = os.getenv("MEETUP_TOKEN")
     _ensure_assets_dir()
 
-    events: List[Dict[str, Any]] = []
+    events: list[dict[str, Any]] = []
     if token:
         try:
             events = fetch_api(group, token)
@@ -199,7 +189,7 @@ def main() -> int:
         except Exception as e:
             print(f"[fetch_meetup] iCal fetch failed: {e}")
 
-    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+    with pathlib.Path(OUTPUT_PATH).open("w", encoding="utf-8") as f:
         json.dump(events, f, ensure_ascii=False, indent=2)
     print(f"Wrote {len(events)} events to {OUTPUT_PATH}")
     return 0

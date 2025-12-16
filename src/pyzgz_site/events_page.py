@@ -1,9 +1,11 @@
-import reflex as rx
-from .layout import page_wrapper, styles
-from datetime import datetime, timezone
 import json
 import os
+import pathlib
+from datetime import UTC, datetime
 
+import reflex as rx
+
+from pyzgz_site.layout import page_wrapper, styles
 
 # Resolve assets/events.json relative to the project root (one level up from this file's dir)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -11,29 +13,43 @@ ASSETS_EVENTS = os.path.join(BASE_DIR, "assets", "events.json")
 
 
 def _load_events() -> list[dict]:
-    """
-    Static loading of events from assets/events.json.
+    """Static loading of events from assets/events.json.
     Events are loaded during build time, not at runtime.
     """
     # This file is generated during deployment by GitHub Actions workflow
     # See .github/workflows/pages.yml -> fetch_meetup.py
     try:
         # Try to load events from the generated file
-        if not os.path.exists(ASSETS_EVENTS):
-            return [{"name": "No hay eventos próximamente", "description": "Vuelve pronto para ver nuestros próximos eventos"}]
-            
-        with open(ASSETS_EVENTS, "r", encoding="utf-8") as f:
+        if not pathlib.Path(ASSETS_EVENTS).exists():
+            return [
+                {
+                    "name": "No hay eventos próximamente",
+                    "description": "Vuelve pronto para ver nuestros próximos eventos",
+                },
+            ]
+
+        with pathlib.Path(ASSETS_EVENTS).open(encoding="utf-8") as f:
             data = json.load(f)
-            
+
         # Ensure we always return a list
         if not isinstance(data, list):
-            return [{"name": "Error cargando eventos", "description": "Disculpa, hubo un problema al cargar los eventos"}]
-            
+            return [
+                {
+                    "name": "Error cargando eventos",
+                    "description": "Disculpa, hubo un problema al cargar los eventos",
+                },
+            ]
+
         return data
-        
+
     except Exception as e:
         print(f"Error cargando eventos: {e}")
-        return [{"name": "Error cargando eventos", "description": "Disculpa, hubo un problema al cargar los eventos"}]
+        return [
+            {
+                "name": "Error cargando eventos",
+                "description": "Disculpa, hubo un problema al cargar los eventos",
+            },
+        ]
 
 
 def _parse_when(ev: dict) -> datetime | None:
@@ -42,7 +58,7 @@ def _parse_when(ev: dict) -> datetime | None:
     t = ev.get("time")
     if isinstance(t, (int, float)):
         try:
-            return datetime.fromtimestamp(float(t) / 1000.0, tz=timezone.utc)
+            return datetime.fromtimestamp(float(t) / 1000.0, tz=UTC)
         except Exception:
             pass
     for key in ("date", "local_date", "utc_time", "iso_time"):
@@ -55,7 +71,7 @@ def _parse_when(ev: dict) -> datetime | None:
                 try:
                     # Try date only
                     return datetime.strptime(val, "%Y-%m-%d").replace(
-                        tzinfo=timezone.utc
+                        tzinfo=UTC,
                     )
                 except Exception:
                     pass
@@ -70,7 +86,7 @@ def _format_when(dt: datetime | None) -> str:
 
 
 def _split_events(events: list[dict]) -> tuple[list[dict], list[dict]]:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     enriched: list[tuple[dict, datetime | None]] = [(e, _parse_when(e)) for e in events]
     upcoming = [e for e, d in enriched if d and d >= now]
     past = [e for e, d in enriched if d and d < now]
@@ -84,11 +100,7 @@ def _event_card(ev: dict) -> rx.Component:
     title = ev.get("name") or ev.get("title") or "Evento"
     url = ev.get("link") or ev.get("url") or "#"
     when = _format_when(_parse_when(ev))
-    venue = (
-        ev.get("venue", {}).get("name")
-        if isinstance(ev.get("venue"), dict)
-        else ev.get("venue")
-    )
+    venue = ev.get("venue", {}).get("name") if isinstance(ev.get("venue"), dict) else ev.get("venue")
     # desc = ev.get("description") or ev.get("short_description") or ""
     return rx.card(
         rx.vstack(
@@ -125,7 +137,7 @@ def events():
                     align="center",
                 ),
                 style=styles["section"],
-            )
+            ),
         )
 
     upcoming, past = _split_events(data)
@@ -176,5 +188,5 @@ def events():
                 width="100%",
             ),
             style=styles["section"],
-        )
+        ),
     )

@@ -1,6 +1,6 @@
 import reflex as rx
-from .layout import page_wrapper, styles, EMAIL
 
+from pyzgz_site.layout import EMAIL, page_wrapper, styles
 
 GOOGLE_FORM_URL = "https://forms.gle/qvMCiq8GkyCty79N8"
 
@@ -23,5 +23,5 @@ def talks():
                 align="center",
             ),
             style=styles["section"],
-        )
+        ),
     )
